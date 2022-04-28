@@ -2,11 +2,57 @@
 
 typedef enum GameScreen { LOGO = 0, TITLE, NEW_GAME, CONTINUE,HIGH_SCORES ,QUIT } GameScreen;
 
+
+void game()
+{
+        const int screenWidth = 800;
+    const int screenHeight = 450;
+    Font fonte = LoadFont("resources/fonts/mecha.png");
+
+    InitWindow(screenWidth, screenHeight, "raylib [core] example - keyboard input");
+
+    Vector2 ballPosition = { (float)screenWidth/2, (float)screenHeight/2 };
+
+    SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
+    //--------------------------------------------------------------------------------------
+
+    // Main game loop
+    while (!WindowShouldClose())    // Detect window close button or ESC key
+    {
+        // Update
+        //----------------------------------------------------------------------------------
+        if (IsKeyDown(KEY_RIGHT)) ballPosition.x += 2.0f;
+        if (IsKeyDown(KEY_LEFT)) ballPosition.x -= 2.0f;
+        if (IsKeyDown(KEY_UP)) ballPosition.y -= 2.0f;
+        if (IsKeyDown(KEY_DOWN)) ballPosition.y += 2.0f;
+        //----------------------------------------------------------------------------------
+
+        // Draw
+        //----------------------------------------------------------------------------------
+        BeginDrawing();
+
+
+            ClearBackground(RAYWHITE);
+
+            DrawText("move the ball with arrow keys", 10, 10, 20, DARKGRAY);
+
+            DrawCircleV(ballPosition, 50, MAROON);
+
+        EndDrawing();
+        if(IsKeyPressed(KEY_ENTER))
+            break;
+        //----------------------------------------------------------------------------------
+    }
+}
+
 int main(void)
 {
     const int screenWidth = 1600;
     const int screenHeight = 900;
+    int tchauzinho = 0;
     int menu_choice = 0;    
+    Vector2 ballPosition = { (float)screenWidth/2, (float)screenHeight/2 };
+
     Font fonte = LoadFont("resources/fonts/mecha.png");
 
     InitWindow(screenWidth, screenHeight, "BattleINF by Caetano Müller");
@@ -43,8 +89,8 @@ int main(void)
                 if(IsKeyPressed(KEY_ENTER) || IsGestureDetected(GESTURE_TAP)){
                     switch(menu_choice)
                     {
-                        case 0:currentScreen = NEW_GAME; break;
-                        case 1:currentScreen = CONTINUE; break;
+                        case 1:currentScreen = NEW_GAME; break;
+                        case 0:currentScreen = CONTINUE; break;
                         case 2:currentScreen = HIGH_SCORES; break;
                         case 3:currentScreen = QUIT; break;
                     }   
@@ -57,13 +103,16 @@ int main(void)
             } break;
             case NEW_GAME:
             {
-                // TODO: Update GAMEPLAY screen variables here!
-
-                // Press enter to change to ENDING screen
-                if (IsKeyPressed(KEY_ENTER) || IsGestureDetected(GESTURE_TAP))
+                while (!(IsKeyDown(KEY_Q)))    // Detect window close button or ESC key
                 {
-                    currentScreen = QUIT;
+                    // Update
+                    //----------------------------------------------------------------------------------
+                    if (IsKeyDown(KEY_RIGHT)) ballPosition.x += 4.0f;
+                    if (IsKeyDown(KEY_LEFT)) ballPosition.x -= 4.0f;
+                    if (IsKeyDown(KEY_UP)) ballPosition.y -= 4.0f;
+                    if (IsKeyDown(KEY_DOWN)) ballPosition.y += 4.0f;
                 }
+
             } break;
             case HIGH_SCORES:
             {
@@ -71,13 +120,9 @@ int main(void)
             }break;
             case QUIT:
             {
-                // TODO: Update ENDING screen variables here!
-
-                // Press enter to return to TITLE screen
-                if (IsKeyPressed(KEY_ENTER))
-                {
-                    currentScreen = TITLE;
-                }
+                if(tchauzinho == 60)
+                    return 0;
+                tchauzinho++;
             } break;
             default: break;
         }
@@ -122,10 +167,16 @@ int main(void)
                 //TRAZER IMPLEMENTAÇÃO DE NOVO JOGO
                 case NEW_GAME:
                 {
-                    // TODO: Draw GAMEPLAY screen here!
-                    DrawRectangle(0, 0, screenWidth, screenHeight, PURPLE);
-                    DrawText("GAMEPLAY SCREEN", 20, 20, 40, MAROON);
-                    DrawText("PRESS ENTER or TAP to JUMP to ENDING SCREEN", 130, 220, 20, MAROON);
+                    BeginDrawing();
+
+
+                        ClearBackground(RAYWHITE);
+
+                        DrawText("move the ball with arrow keys", 10, 10, 20, DARKGRAY);
+
+                        DrawCircleV(ballPosition, 50, MAROON);
+
+                    EndDrawing();
 
                 } break;
 
@@ -140,10 +191,8 @@ int main(void)
                 case QUIT:
                 {
                     // TODO: Draw ENDING screen here!
-                    DrawRectangle(0, 0, screenWidth, screenHeight, BLUE);
-                    DrawText("ENDING SCREEN", 20, 20, 40, DARKBLUE);
-                    DrawText("PRESS ENTER or TAP to RETURN to TITLE SCREEN", 120, 220, 20, DARKBLUE);
-
+                    DrawRectangle(0, 0, screenWidth, screenHeight, BLACK);
+                    DrawText("Obrigado por jogar :)", 20, 20, 40, RED);
                 } break;
                 default: break;
             }
@@ -157,7 +206,7 @@ int main(void)
 
     // TODO: Unload all loaded data (textures, fonts, audio) here!
 
-    CloseWindow();        // Close window and OpenGL context
+    CloseWindow();
     
 
     return 0;

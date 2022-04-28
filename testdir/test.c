@@ -13,6 +13,12 @@
 
 #include "raylib.h"
 
+void game()
+{
+
+    
+}
+
 int main(void)
 {
     // Initialization
